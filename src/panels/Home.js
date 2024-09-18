@@ -27,7 +27,7 @@ export const Home = ({ id, fetchedUser }) => {
         <Div>
           <Button stretched size="l" mode="secondary" onClick={() => bridge.send('VKWebAppShowStoryBox', {
             background_type: 'image',
-            url : 'https://cataas.com/cat?width=325&height=488',
+            url: 'https://cataas.com/cat?width=325&height=488&random=' + Date.now(),
           })}>
             Откройте редактор историй, пожалуйста!
           </Button>

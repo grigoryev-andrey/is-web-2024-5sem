@@ -103,10 +103,11 @@
   border: 1px solid transparent;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 591px) {
   .cart-button {
     white-space: initial;
     padding: 0 20px;
+    margin-left: 0;
   }
 }
 

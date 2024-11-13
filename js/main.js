@@ -10,7 +10,7 @@
     });
 
     window.addEventListener('DOMContentLoaded', function () {
-        const currentPath = document.location.pathname.split("/").pop();
+        let currentPath = document.location.pathname.split("/").pop();
         if (currentPath === "" || currentPath === "/") {
             currentPath = "index.html";
         }

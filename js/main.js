@@ -10,19 +10,14 @@
     });
 
     window.addEventListener('DOMContentLoaded', function () {
-        let currentPath = window.location.pathname;
-        const repoName = "/is-web-2024-5sem"; 
-        if (currentPath.startsWith(repoName)) {
-            currentPath = currentPath.substring(repoName.length);
-        }
-        if (currentPath === "/" || currentPath === "") {
+        let currentPath = document.location.pathname.split("/").pop();
+        if (currentPath === "" || currentPath === "/") {
             currentPath = "index.html";
         }
-        currentPath = currentPath.replace(/^\//, '');
         const menuItems = document.querySelectorAll('nav ul li a');
         menuItems.forEach((item) => {
             const itemPath = item.getAttribute('href');
-            if (itemPath && currentPath.includes(itemPath)) {
+            if (currentPath === itemPath) {
                 item.parentElement.classList.add('active');
             }
         });

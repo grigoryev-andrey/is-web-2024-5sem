@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <title>Расписание</title>
+  <link rel="stylesheet" type="text/css" href="styles_schedule.css" />
+  <script src="js/schedule.js"></script>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="index.html">Главная</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <h1>Конструктор расписания</h1>
+    <form id="scheduleForm">
+      <label for="subject">Предмет:</label>
+      <input type="text" id="subject" name="subject" required>
+      <label for="day">День недели:</label>
+      <select id="day" name="day" required>
+        <option value="Понедельник">Понедельник</option>
+        <option value="Вторник">Вторник</option>
+        <option value="Среда">Среда</option>
+        <option value="Четверг">Четверг</option>
+        <option value="Пятница">Пятница</option>
+      </select>
+      <label for="time">Время:</label>
+      <input type="time" id="time" name="time" required>
+      <button type="submit">Добавить</button>
+    </form>
+    <div id="scheduleContainer">
+      <h2>Расписание:</h2>
+    </div>
+    <br>
+    <button id="saveSchedule">Сохранить</button>
+    <button id="loadSchedule">Загрузить</button>
+  </main>
+</body>
+
+</html>

@@ -10,37 +10,40 @@ document.addEventListener('DOMContentLoaded', () => {
     days.forEach(day => {
         const table = document.createElement('table');
         table.id = `table-${day}`;
-        table.innerHTML = `
-            <thead>
-                <tr>
-                    <th>Предмет</th>
-                    <th>Время</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        `;
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        const subjectHeader = document.createElement('th');
+        subjectHeader.textContent = 'Предмет';
+        const timeHeader = document.createElement('th');
+        timeHeader.textContent = 'Время';
+        headerRow.appendChild(subjectHeader);
+        headerRow.appendChild(timeHeader);
+        thead.appendChild(headerRow);
+        const tbody = document.createElement('tbody');
+        table.appendChild(thead);
+        table.appendChild(tbody);
         const section = document.createElement('div');
-        section.innerHTML = `<h3>${day}</h3>`;
+        const dayTitle = document.createElement('h3');
+        dayTitle.textContent = day;
+        section.appendChild(dayTitle);
         section.appendChild(table);
         scheduleContainer.appendChild(section);
-        tables[day] = table.querySelector('tbody');
+        tables[day] = tbody;
     });
 
     form.addEventListener('submit', (event) => {
         event.preventDefault();
-
         const subject = form.subject.value;
         const day = form.day.value;
         const time = form.time.value;
-
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${subject}</td>
-            <td>${time}</td>
-        `;
+        const subjectCell = document.createElement('td');
+        subjectCell.textContent = subject;
+        const timeCell = document.createElement('td');
+        timeCell.textContent = time;
+        row.appendChild(subjectCell);
+        row.appendChild(timeCell);
         tables[day].appendChild(row);
-
         form.reset();
     });
 
@@ -64,13 +67,17 @@ document.addEventListener('DOMContentLoaded', () => {
     loadButton.addEventListener('click', () => {
         const schedule = JSON.parse(localStorage.getItem('schedule') || '{}');
         days.forEach(day => {
-            tables[day].innerHTML = '';
+            while (tables[day].firstChild) {
+                tables[day].removeChild(tables[day].firstChild);
+            }
             (schedule[day] || []).forEach(item => {
                 const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${item.subject}</td>
-                    <td>${item.time}</td>
-                `;
+                const subjectCell = document.createElement('td');
+                subjectCell.textContent = item.subject;
+                const timeCell = document.createElement('td');
+                timeCell.textContent = item.time;
+                row.appendChild(subjectCell);
+                row.appendChild(timeCell);
                 tables[day].appendChild(row);
             });
         });

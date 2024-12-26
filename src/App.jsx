@@ -8,7 +8,7 @@ import "./styles.css";
 
 function App() {
     return (
-        <Router>
+        <Router basename='/is-web-2024-5sem/'>
             <Header />
             <main>
                 <Routes>

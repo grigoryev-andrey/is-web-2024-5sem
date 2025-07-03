@@ -7,27 +7,32 @@ document.addEventListener("DOMContentLoaded", () => {
     preloader.appendChild(spinner);
     testimonialsGrid.insertAdjacentElement("beforebegin", preloader);
 
-    const API_URL_COMMENTS = "https://jsonplaceholder.typicode.com/comments";
-    const API_URL_PHOTOS = "https://jsonplaceholder.typicode.com/photos";
+    const API_URL_COMMENTS = "https://dummyjson.com/comments";
+    const API_URL_USERS = "https://dummyjson.com/users";
 
     async function fetchTestimonials() {
         try {
-            const randomFilter = Math.random() > 0.5 ? "id_gte=100" : "id_lte=200";
-
-            const [commentsResponse, photosResponse] = await Promise.all([
-                fetch(`${API_URL_COMMENTS}?${randomFilter}`),
-                fetch(`${API_URL_PHOTOS}`)
-            ]);
-
-            if (!commentsResponse.ok || !photosResponse.ok) {
-                throw new Error("Ошибка загрузки данных");
+            const commentsResponse = await fetch(API_URL_COMMENTS);
+            if (!commentsResponse.ok) {
+                throw new Error("Ошибка загрузки комментариев");
             }
+            const commentsData = await commentsResponse.json();
+            let comments = commentsData.comments;
 
-            const comments = await commentsResponse.json();
-            const photos = await photosResponse.json();
+            comments = comments.sort(() => Math.random() - 0.5).slice(0, 6);
+
+            const usersResponse = await fetch(`${API_URL_USERS}?limit=1000`);
+            if (!usersResponse.ok) {
+                throw new Error("Ошибка загрузки пользователей");
+            }
+            const usersData = await usersResponse.json();
+            const usersMap = {};
+            usersData.users.forEach(user => {
+                usersMap[user.id] = user;
+            });
 
             preloader.style.display = "none";
-            renderTestimonials(comments.slice(0, 6), photos);
+            renderTestimonials(comments, usersMap);
         } catch (error) {
             preloader.style.display = "none";
             const errorMessage = document.createElement("div");
@@ -38,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function renderTestimonials(testimonials, photos) {
+    function renderTestimonials(testimonials, usersMap) {
         testimonialsGrid.innerHTML = "";
 
         const rows = [];
@@ -51,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const testimonialsRow = document.createElement("div");
             testimonialsRow.className = "testimonials-row";
 
-            row.forEach(({ name, email, body, id }) => {
+            row.forEach(({ body, user }) => {
                 const column = document.createElement("div");
                 column.className = "testimonial-column";
 
@@ -63,15 +68,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const avatar = document.createElement("img");
                 avatar.className = "testimonial-avatar";
-                avatar.src = photos[id]?.thumbnailUrl || "img/default-avatar.png";
-                avatar.alt = `Фото ${name}`;
+                avatar.src = usersMap[user.id]?.image || "img/default-avatar.png";
+                avatar.alt = `Фото ${usersMap[user.id]?.firstName || "Пользователь"}`;
 
                 const info = document.createElement("div");
                 info.className = "testimonial-info";
 
                 const nameElement = document.createElement("h3");
                 nameElement.className = "testimonial-name";
-                nameElement.textContent = name;
+                nameElement.textContent = `${usersMap[user.id]?.firstName || "Пользователь"} ${usersMap[user.id]?.lastName || ""}`;
 
                 const rating = document.createElement("img");
                 rating.className = "testimonial-rating";
